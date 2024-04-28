@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:learn_flutter_authentication/providers/authentication.dart';
+import 'package:provider/provider.dart';
 import './home_page.dart';
 
 const users =  {
@@ -7,9 +9,14 @@ const users =  {
   'hunter@gmail.com': 'hunter',
 };
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
   Duration get loginTime => const Duration(milliseconds: 2250);
 
   Future<String?> _authUser(LoginData data) {
@@ -28,6 +35,7 @@ class AuthPage extends StatelessWidget {
   Future<String?> _signupUser(SignupData data) {
     debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
     return Future.delayed(loginTime).then((_) {
+      Provider.of<Authentication>(context, listen: false).signUp(data.name, data.password);
       return null;
     });
   }

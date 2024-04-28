@@ -22,7 +22,7 @@ class AddProductPage extends StatelessWidget {
           builder: (context) {
             return AlertDialog(
               title: const Text("Error Occured"),
-              content: Text(onError.toString()),
+              content: Text("Error :  $onError"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
