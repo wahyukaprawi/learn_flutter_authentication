@@ -4,11 +4,6 @@ import 'package:learn_flutter_authentication/providers/authentication.dart';
 import 'package:provider/provider.dart';
 import './home_page.dart';
 
-const users =  {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
-
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -21,12 +16,12 @@ class _AuthPageState extends State<AuthPage> {
 
   Future<String?> _authUser(LoginData data) {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
-        return 'User not exists';
-      }
-      if (users[data.name] != data.password) {
-        return 'Password does not match';
+    return Future.delayed(loginTime).then((_) async {
+      try {
+        await Provider.of<Authentication>(context, listen: false)
+            .login(data.name, data.password);
+      } catch (error) {
+        return error.toString();
       }
       return null;
     });
@@ -34,8 +29,13 @@ class _AuthPageState extends State<AuthPage> {
 
   Future<String?> _signupUser(SignupData data) {
     debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
-    return Future.delayed(loginTime).then((_) {
-      Provider.of<Authentication>(context, listen: false).signUp(data.name, data.password);
+    return Future.delayed(loginTime).then((_) async {
+      try {
+        await Provider.of<Authentication>(context, listen: false)
+            .signUp(data.name, data.password);
+      } catch (error) {
+        return error.toString();
+      }
       return null;
     });
   }
@@ -43,9 +43,6 @@ class _AuthPageState extends State<AuthPage> {
   Future<String> _recoverPassword(String name) {
     debugPrint('Name: $name');
     return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
-        return 'User not exists';
-      }
       // ignore: null_check_always_fails
       return null!;
     });

@@ -16,7 +16,10 @@ class AddProductPage extends StatelessWidget {
     void save(String title, String price) {
       Provider.of<Products>(context, listen: false)
           .addProduct(title, price)
-          .catchError((onError) {
+          .then((_) {
+        Navigator.pop(context);
+      }).catchError((onError) {
+        // ignore: invalid_return_type_for_catch_error
         return showDialog(
           context: context,
           builder: (context) {
