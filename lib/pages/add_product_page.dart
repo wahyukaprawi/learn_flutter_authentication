@@ -14,18 +14,19 @@ class AddProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void save(String title, String price) {
-      Provider.of<Products>(context, listen: false)
-          .addProduct(title, price)
-          .then((_) {
-        Navigator.pop(context);
-      }).catchError((onError) {
-        // ignore: invalid_return_type_for_catch_error
-        return showDialog(
+      try {
+        Provider.of<Products>(context, listen: false)
+            .addProduct(title, price)
+            .then((_) {
+          Navigator.pop(context);
+        });
+      } catch (error) {
+        showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: const Text("Error Occured"),
-              content: Text("Error :  $onError"),
+              content: Text("Error :  $error"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -35,7 +36,7 @@ class AddProductPage extends StatelessWidget {
             );
           },
         );
-      });
+      }
     }
 
     return Scaffold(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter_authentication/pages/auth_page.dart';
+import 'package:learn_flutter_authentication/pages/home_page.dart';
 import 'package:learn_flutter_authentication/providers/authentication.dart';
 import 'package:learn_flutter_authentication/providers/product.dart';
 import 'package:provider/provider.dart';
@@ -21,17 +22,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Authentication(),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => Products(),
+        ChangeNotifierProxyProvider<Authentication, Products>(
+          create: (context) => Products(),
+          update: (context, authentication, products) =>
+              products!..updateData(authentication.token),
         ),
       ],
-      builder: (context, child) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const AuthPage(),
-        routes: {
-          AddProductPage.route: (ctx) => AddProductPage(),
-          EditProductPage.route: (ctx) => const EditProductPage(),
-        },
+      builder: (context, child) => Consumer<Authentication>(
+        builder: (context, authentication, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: authentication.isAuth ? const HomePage() : const AuthPage(),
+          routes: {
+            AddProductPage.route: (ctx) => AddProductPage(),
+            EditProductPage.route: (ctx) => const EditProductPage(),
+          },
+        ),
       ),
     );
   }
