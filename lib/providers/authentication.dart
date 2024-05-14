@@ -57,7 +57,6 @@ class Authentication with ChangeNotifier {
           seconds: int.parse(responseData["expiresIn"]),
         ),
       );
-      notifyListeners();
     } catch (error) {
       rethrow;
     }
@@ -89,9 +88,15 @@ class Authentication with ChangeNotifier {
           seconds: int.parse(responseData["expiresIn"]),
         ),
       );
-      notifyListeners();
     } catch (error) {
       rethrow;
     }
+  }
+
+  void logout() {
+    _idToken = null;
+    userId = null;
+    _expiryDate = null;
+    notifyListeners();
   }
 }

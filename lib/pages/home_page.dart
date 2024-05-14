@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter_authentication/providers/authentication.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
@@ -64,6 +65,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("All Products"),
+        leading: IconButton(
+          onPressed: () {
+            Provider.of<Authentication>(context, listen: false).logout();
+          },
+          icon: const Icon(Icons.logout),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

@@ -15,7 +15,7 @@ class Products with ChangeNotifier {
     notifyListeners();
   }
 
-  final List<Product> _allProduct = [];
+  List<Product> _allProduct = [];
 
   List<Product> get allProduct => _allProduct;
 
@@ -105,6 +105,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> inisialData() async {
+    _allProduct = [];
     Uri url = Uri.parse(
         'https://authentication-6fbca-default-rtdb.firebaseio.com/products.json?auth=$token&orderBy="userId"&equalTo="$userId"');
 
