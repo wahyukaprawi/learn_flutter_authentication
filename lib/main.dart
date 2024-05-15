@@ -24,14 +24,28 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Authentication, Products>(
           create: (context) => Products(),
-          update: (context, authentication, products) =>
-              products!..updateData(authentication.token, authentication.userId),
+          update: (context, authentication, products) => products!
+            ..updateData(authentication.token, authentication.userId),
         ),
       ],
       builder: (context, child) => Consumer<Authentication>(
         builder: (context, authentication, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: authentication.isAuth ? const HomePage() : const AuthPage(),
+          home: authentication.isAuth
+              ? const HomePage()
+              : FutureBuilder(
+                  future: authentication.autologin(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return const AuthPage();
+                  },
+                ),
           routes: {
             AddProductPage.route: (ctx) => AddProductPage(),
             EditProductPage.route: (ctx) => const EditProductPage(),
